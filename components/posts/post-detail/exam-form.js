@@ -9,7 +9,7 @@ import NotificationContext from "../../../store/notification-context";
 const examdDate = new Date().toLocaleDateString("en-US");
 function ExamForm(props) {
   //const linkPath = `/posts/questions/${props.post.id}/`;
-  const [session, loading] = useSession();
+  const {data:session, status} = useSession();
   const [name, setName] = useState("");
   const [username, setUserName] = useState("");
   const [examNo, setExamNo] = useState("");

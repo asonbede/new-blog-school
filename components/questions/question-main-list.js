@@ -75,7 +75,7 @@ const MainQuestionList = ({
         )} */}
         <section>
           <div class="row justify-content-center align-items-center">
-            <div class="col-11">
+            <div class="col-12">
               <div class="card bg-light">
                 <div class="card-header">
                   <div class="d-flex align-items-center justify-content-between">

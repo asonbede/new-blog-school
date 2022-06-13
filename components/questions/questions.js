@@ -32,7 +32,7 @@ function Questions(props) {
   const [controlLiActive, setcontrolLiActive] = useState();
 
   //const [session, loading] = useSession();
-  const {data:session, status} = useSession();
+  const { data: session, status } = useSession();
   const notificationCtx = useContext(NotificationContext);
   const { questions: items, blogId, questionType, subjects, quesForm } = props;
   //console.log({ items }, "fro,m questions");
@@ -245,7 +245,7 @@ function Questions(props) {
     notificationCtx.showNotification({
       title: "questions is being marked...",
       message: "Your question is currently being assessed, please wait",
-      status: "success",
+      status: "pending",
     });
     //}
 

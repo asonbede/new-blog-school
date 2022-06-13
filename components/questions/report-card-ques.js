@@ -4,12 +4,12 @@ import Image from "next/image";
 import { v4 as uuid } from "uuid";
 import { useRouter } from "next/router";
 import { useState, useEffect, useContext } from "react";
-import { useSession, signOut } from "next-auth/client";
+import { useSession, signOut } from "next-auth/react";
 import NotificationContext from "../../store/notification-context";
 const examdDateValue = new Date().toLocaleDateString("en-US");
-function ExamForm({ subjects, getSubjectMark }) {
+function ExamForm({ subjects, getSubjectMark, getAverageScore }) {
   //const linkPath = `/posts/questions/${props.post.id}/`;
-  const [session, loading] = useSession();
+  const { data: session, status } = useSession();
   const [name, setName] = useState("");
   const [username, setUserName] = useState("");
   const [examNo, setExamNo] = useState("");
@@ -158,25 +158,26 @@ function ExamForm({ subjects, getSubjectMark }) {
           data-bs-parent="#report-card"
         >
           <div class="accordion-body">
-            <div class="fw-bolder border mt-5 p-3 shadow">
-              <section
-                style={{
-                  // position: "absolute",
-                  // top: "5%",
-                  // left: "10%",
-                  zIndex: "10",
-                  width: "70%",
-                  borderRadius: "5px",
-                }}
-              >
-                <div class="row text-center justify-content-center align-items-center bg-warning">
-                  <div class="d-flex">
+            <div
+              class="fw-bolder border mt-5 p-1 shadow"
+              style={{
+                // position: "absolute",
+                // top: "5%",
+                // left: "10%",
+                zIndex: "10",
+                width: "100%",
+                borderRadius: "2px",
+              }}
+            >
+              <section>
+                <div class="row text-center justify-content-center align-items-center bg-warning w-100">
+                  <div class="d-flex justify-content-between align-items-center">
                     <img
                       // className={classes["post-image"]}
                       src={session.user.image.imageUrl}
                       class="rounded-circle mb-3 mr-3 img-fluid"
                       alt="card image"
-                      style={{ witd: "10%" }}
+                      style={{ width: "20%" }}
                     />
                     <div>
                       <h5 class="display-5 ">Asonditeck</h5>
@@ -185,7 +186,7 @@ function ExamForm({ subjects, getSubjectMark }) {
                   </div>
 
                   <div class="col-12">
-                    <div class="card m-3">
+                    <div class="card m-1 w-100">
                       <div class="card-body text-center">
                         <form>
                           <fieldset class="border p-2">
@@ -242,7 +243,7 @@ function ExamForm({ subjects, getSubjectMark }) {
 
                           <fieldset class="border border-2 p-2">
                             <legend class="float-none w-auto p-2">
-                              subject(s) and score
+                              subject and score
                             </legend>
                             <ol class="list-group list-group-numbered">
                               <li class="list-group-item d-flex justify-content-between align-items-start">
@@ -261,18 +262,63 @@ function ExamForm({ subjects, getSubjectMark }) {
                                         {capFirstLetter(subject)}
                                       </div>
                                     </div>
-                                    <span class="badge bg-primary rounded-pill">
-                                      {Math.round(
-                                        (getSubjectMark()[`${subject}`].score /
-                                          getSubjectMark()[`${subject}`].len) *
-                                          100
-                                      )}
+                                    <span
+                                      class={`badge rounded-pill ${
+                                        getSubjectMark()[`${subject}`]
+                                          .per100Score >= 50
+                                          ? "bg-success"
+                                          : "bg-danger"
+                                      }`}
+                                    >
+                                      {
+                                        getSubjectMark()[`${subject}`]
+                                          .per100Score
+                                      }
                                       %
                                     </span>
                                   </li>
                                 </>
                               ))}
                             </ol>
+                          </fieldset>
+                          <fieldset class="border border-2 p-2">
+                            <legend class="float-none w-auto p-2">
+                              Average Score
+                            </legend>
+                            <p
+                              class={`fw-bold display-6 ${
+                                getAverageScore() >= 50
+                                  ? "text-success"
+                                  : "text-danger"
+                              } `}
+                            >
+                              {" "}
+                              {getAverageScore()}%
+                            </p>
+                          </fieldset>
+                          <fieldset class="border border-2 p-2">
+                            <legend class="float-none w-auto p-2">
+                              Remarks
+                            </legend>
+                            {getAverageScore() >= 70 ? (
+                              <span class="text-success fw-bold display-6">
+                                <em> Excellent. </em>
+                                <p class="text-success">
+                                  <em> You are good to go.</em>{" "}
+                                </p>
+                              </span>
+                            ) : getAverageScore() <= 40 ? (
+                              <span class="text-danger fw-bold display-6">
+                                <em>
+                                  Poor performance but you can still make it.
+                                  Study harder and resit the exam{" "}
+                                </em>
+                              </span>
+                            ) : (
+                              <span class="text-primar fw-bold display-6">
+                                <em> Good. You can do better.</em>
+                              </span>
+                            )}
                           </fieldset>
                           {/* <div className="d-flex">
                   <button type="submit" class="btn btn-primary me-2">

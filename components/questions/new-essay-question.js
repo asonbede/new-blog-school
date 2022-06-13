@@ -21,7 +21,7 @@ import {
   handleImageInsert,
 } from "../../hooks/input-editor-hooks";
 
-import { useSession } from "next-auth/client";
+import { useSession } from "next-auth/react";
 //Published date
 const formattedDatePublished = new Date().toLocaleDateString("en-US", {
   day: "numeric",
@@ -31,7 +31,8 @@ const formattedDatePublished = new Date().toLocaleDateString("en-US", {
 
 function NewEssayQuestion(props) {
   const [isInvalid, setIsInvalid] = useState(false);
-  const [session, loading] = useSession();
+  const {data:session, status} = useSession();
+  //const [session, loading] = useSession();
   //const useFieldTopic = useField("text");
 
   const useEditorQuestion = useEditor();

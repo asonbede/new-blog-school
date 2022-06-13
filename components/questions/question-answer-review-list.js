@@ -18,6 +18,7 @@ function QuestionAnswerReviewList(props) {
     questionType,
     selectValue,
     getSubjectMark,
+    getAverageScore,
     subjects,
     quesForm,
   } = props;
@@ -331,7 +332,7 @@ function QuestionAnswerReviewList(props) {
 
   function revQuestionList(subject = items[0]) {
     return (
-      <div className={classes.form}>
+      <div>
         {items.map((item, questionIndex) => (
           <div key={item._id}>
             {item.subject === subject && renderQuestions(questionIndex, item)}
@@ -440,7 +441,11 @@ function QuestionAnswerReviewList(props) {
       {quesForm === "rev-ques" && revQuestionList()}
       {quesForm !== "rev-ques" && examQuestionList()}
       {quesForm !== "rev-ques" && (
-        <ReportCard subjects={subjects} getSubjectMark={getSubjectMark} />
+        <ReportCard
+          subjects={subjects}
+          getSubjectMark={getSubjectMark}
+          getAverageScore={getAverageScore}
+        />
       )}
     </>
   );

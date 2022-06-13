@@ -9,7 +9,7 @@ import {
 
 import { hashPassword, verifyPassword } from "../../../helpers/auth";
 // import {connectDatabase} from  "../../helpers/db-utils"
-import { getSession } from "next-auth/client";
+import { getSession } from "next-auth/react";
 
 const ObjectId = require("mongodb").ObjectID;
 

@@ -29,7 +29,7 @@ import {
   updateDocument,
   deleteDocument,
 } from "../../../helpers/db-utils";
-import { getSession } from "next-auth/client";
+import { getSession } from "next-auth/react";
 
 async function handler(req, res) {
   const blogId = req.query.questionId;

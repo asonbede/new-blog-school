@@ -24,7 +24,7 @@ import classes from "./new-questions-form.module.css";
 import MyRichEditor from "../rich-text-editor/myrich-text-editor";
 import NotificationContext from "../../store/notification-context";
 //import { options, useSession } from "next-auth/client";
-import { useSession } from "next-auth/client";
+import { useSession } from "next-auth/react";
 import {
   useField,
   useEditor,
@@ -36,7 +36,8 @@ function NewQuestion(props) {
   const [linkedValue, setlinkedValue] = useState(0);
   const [filteredOptionsLen, setfilteredOptionsLen] = useState();
   const [enteredCorrectOption, setselectValue] = useState("A");
-  const [session, loading] = useSession();
+  //const [session, loading] = useSession();
+  const {data:session, status} = useSession();
   //initialize function that will enable you to enter input and save state
   const useFieldSubject = useField("text");
   const useFieldExamType = useField("text");

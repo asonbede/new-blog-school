@@ -48,11 +48,33 @@ function QuestionReviewSelect(props) {
       );
       correctObj = {
         ...correctObj,
-        [element]: { score: correctList.length, len: totalSubject.length },
+        [element]: {
+          score: correctList.length,
+          len: totalSubject.length,
+          per100Score: Math.round(
+            (correctList.length / totalSubject.length) * 100
+          ),
+        },
       };
     }
     return correctObj;
   }
+  function getAverageScore() {
+    const scores = subjects.map(
+      (subject) => getSubjectMark()[`${subject}`].per100Score
+    );
+    const sumOfScores = scores.reduce(
+      (accumulator, currentValue) => accumulator + currentValue
+    );
+    return Math.round(sumOfScores / subjects.length);
+  }
+
+  // {Math.round(
+  //   (getSubjectMark()[`${subject}`].score /
+  //     getSubjectMark()[`${subject}`].len) *
+  //     100
+  // )}
+  // %
 
   function setQuestionNumber() {
     if (selectedReview === "all") {
@@ -122,7 +144,7 @@ function QuestionReviewSelect(props) {
     //   ) : null}
     // </div>
     <div class="row justify-content-center align-items-center">
-      <div class="col-11">
+      <div class="col-12">
         <div class="card bg-light">
           <div class="card-header">
             <div class="d-flex align-items-center justify-content-between">
@@ -180,6 +202,7 @@ function QuestionReviewSelect(props) {
                 skippedQuestions={skippedQuestions}
                 selectValue={selectValue}
                 getSubjectMark={getSubjectMark}
+                getAverageScore={getAverageScore}
                 subjects={subjects}
                 quesForm={quesForm}
               />
@@ -191,6 +214,7 @@ function QuestionReviewSelect(props) {
                 questionType="correct-questions"
                 selectValue={selectValue}
                 getSubjectMark={getSubjectMark}
+                getAverageScore={getAverageScore}
                 subjects={subjects}
                 quesForm={quesForm}
               />
@@ -202,6 +226,7 @@ function QuestionReviewSelect(props) {
                 questionType="incorrect-questions"
                 selectValue={selectValue}
                 getSubjectMark={getSubjectMark}
+                getAverageScore={getAverageScore}
                 subjects={subjects}
                 quesForm={quesForm}
               />
@@ -213,6 +238,7 @@ function QuestionReviewSelect(props) {
                 questionType="skipped-questions"
                 selectValue={selectValue}
                 getSubjectMark={getSubjectMark}
+                getAverageScore={getAverageScore}
                 subjects={subjects}
                 quesForm={quesForm}
               />

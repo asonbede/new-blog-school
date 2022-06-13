@@ -4,7 +4,7 @@ import DisplayEditorContent from "../rich-text-editor/display-editor-content";
 import NotificationContext from "../../store/notification-context";
 import { useRouter } from "next/router";
 import NewEssayQuestion from "./new-essay-question";
-import { useSession, signOut } from "next-auth/client";
+import { useSession, signOut } from "next-auth/react";
 import Button from "../ui/button";
 //import Togglable from "../togglable/togglable";
 async function sendAuthDataModerate(authDetails, setFunc) {
@@ -59,8 +59,8 @@ function EssayTypeQuestions({ items, blogId, selectValue }) {
   const [moderatedValue, setmoderatedValue] = useState();
   const [authValue, setauthValue] = useState();
   const [moderated, setmoderated] = useState();
-
-  const [session, loading] = useSession();
+  const {data:session, status} = useSession();
+  //const [session, loading] = useSession();
   //authorusername, imageProfileUrl, author;
   const [author, setAuthor] = useState();
   const [imageProfileUrl, setimageProfileUrl] = useState();

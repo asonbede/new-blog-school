@@ -5,7 +5,7 @@ import {
   deleteDocument,
   updateDocument,
 } from "../../../helpers/db-utils";
-import { getSession } from "next-auth/client";
+import { getSession } from "next-auth/react";
 async function handler(req, res) {
   let client;
   const blogId = req.query.commentId;
