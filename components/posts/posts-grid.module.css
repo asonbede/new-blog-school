@@ -1,0 +1,33 @@
+/* .grid {
+  list-style: none;
+  margin-left: 5%;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+  gap: 1.5rem;
+  align-content: center;
+}
+
+.wrapper {
+  display: flex;
+ 
+  justify-content: space-around;
+  margin-left: 1rem;
+  list-style: none;
+}
+
+.colored-section {
+  background-color: #ff4c68;
+  color: #fff;
+}
+
+.white-section {
+  background-color: #fff;
+}
+.section-heading {
+  font-size: 2rem;
+  line-height: 1.5;
+} */
+.background-home {
+  background-color: #ff4d67;
+}

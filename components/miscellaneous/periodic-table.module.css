@@ -1,0 +1,98 @@
+.tableElem {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.tableElem thead {
+  font-size: 16px;
+  padding: 2px;
+  font-weight: 900;
+  color: blue;
+}
+
+.tableElem td,
+.tableElem th {
+  /* border: 0.1px solid black; */
+  text-align: center;
+  /* font-size: 18px; */
+  font-weight: bold;
+}
+
+.tableElem td {
+  background-color: yellow;
+}
+
+.tableElem th,
+.tableElem td {
+  padding: 2px;
+}
+.first-column,
+.tableElem caption {
+  color: purple;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.dataSmall {
+  font-size: 12px;
+  color: blue;
+}
+
+.showBounds {
+  border: 1px solid rgb(224, 21, 21);
+  border-radius: 3px !important;
+  font-size: large;
+  background-color: #ebe7e1 !important;
+}
+.hideBounds {
+  border: none;
+}
+.familyBonds {
+  border: 2px solid #200e11;
+}
+.rowBonds {
+  border: 2px solid #251014;
+  /* border-left: none;
+  border-right: none;
+  border-top: 2px solid #f57388;
+  border-bottom: 2px solid #f57388; */
+}
+.noRowBonds {
+  border: 2px solid green;
+}
+.groupBonds {
+  border: 2px solid #f57388;
+}
+.pBoundary {
+  border: 2px solid #f57388;
+}
+.pointerClass {
+  cursor: pointer;
+}
+
+/* .dataLarge {
+  font-size: 23px;
+  color: blue;
+  border: 1px solid black;
+} */
+/* .put-lan-margin {
+  margin: 40px;
+}
+.elem-name {
+  font-size: 10px;
+}
+.elem-sym {
+  color: blue;
+  font-size: 12px;
+}
+.mass-num {
+  font-size: 12px;
+} */
+
+/* table{
+    min-width:800px
+}  */
+
+/* .remove-borders{
+    border:0 solid black
+}  */

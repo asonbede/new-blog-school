@@ -1,0 +1,194 @@
+.content {
+  width: 97%;
+  max-width: 98rem;
+  margin: var(--size-8) auto;
+  font-size: var(--size-5);
+  line-height: var(--size-8);
+  /* background-color: var(--color-grey-100); */
+  border-radius: 6px;
+  padding: var(--size-4);
+}
+.cardbanner {
+  width: 95%;
+  margin: 30px;
+  /* background-color: aqua; */
+  /* border: 2px solid black; */
+  /* overflow: scroll; */
+  overflow-x: auto;
+}
+
+.content p {
+  color: var(--color-grey-800);
+}
+
+/* .content .image {
+  margin: var(--size-4) auto;
+  width: 100%;
+  max-width: 600px;
+} */
+.mainImage {
+  width: 100% !important;
+  background-color: red;
+}
+.mainImage > img {
+  width: 100% !important;
+  background-color: aquamarine !important;
+}
+
+@media (min-width: 768px) {
+  .content {
+    padding: var(--size-8);
+  }
+}
+
+.card {
+  overflow: hidden;
+  box-shadow: 0px 2px 20px #d7dfe2;
+  background: white;
+  border-radius: 0.5rem;
+  position: relative;
+  width: 100%;
+  /* margin: 0.5rem; */
+  transition: 250ms all ease-in-out;
+}
+
+.card:hover {
+  /* transform: scale(1.005); */
+  box-shadow: 0px 2px 40px #d7dfe2;
+}
+
+.bannerimg {
+  /* position: absolute; */
+  object-fit: cover;
+  height: auto;
+  width: 100%;
+}
+
+/* .categorytag {
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: white;
+  background: red;
+  padding: 0.5rem 1.3rem 0.5rem 1rem;
+  text-transform: uppercase;
+  position: absolute;
+  z-index: 1;
+  top: 1rem;
+  border-radius: 0 2rem 2rem 0;
+} */
+
+/* .popular {
+  background: #ef257a;
+}
+
+.technology {
+  background: #651fff;
+}
+
+.psychology {
+  background: #e85808;
+} */
+
+.cardbody {
+  margin: 5rem 1rem 1rem 1rem;
+}
+
+/* .bloghashtag {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #4d97b2;
+} */
+
+.blogtitle {
+  line-height: 1.5rem;
+  margin: 1rem 0 0.5rem;
+}
+.excerpt {
+  line-height: 1.5rem;
+  margin: 1rem 0 0.5rem;
+  font-size: 20px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.blogdescription {
+  /* color: #616b74 !important;
+  font-size: 0.9rem !important; */
+  /* width: 100% !important; */
+}
+
+.cardprofile {
+  display: flex;
+  margin-top: 2rem;
+  align-items: center;
+}
+
+.profileimg {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.cardprofileinfo {
+  margin-left: 1rem;
+  display: flex;
+  justify-content: space-around;
+  margin: 5px;
+}
+
+.profilename {
+  font-size: 1rem;
+}
+
+.profilefollowers {
+  color: #616b74;
+  font-size: 0.9rem;
+  margin-left: 6px;
+}
+
+/* .action {
+  margin: 2px;
+  display: flex;
+  justify-content: space-around;
+} */
+.buttonAction {
+  display: flex !important;
+  justify-content: space-around !important;
+}
+/* .buttonAction button {
+  margin: 8px;
+} */
+.buttonAction button,
+.buttonAction a,
+.excerpt button {
+  outline: 0;
+  display: inline-block;
+  padding: 8px;
+
+  text-align: center;
+  cursor: pointer;
+
+  font-size: 24px !important;
+
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+
+  font-family: arial, sans-serif;
+  margin: 8px;
+  color: #069;
+  opacity: 0.5;
+}
+
+.buttonAction button:hover,
+.buttonAction a:hover,
+.excerpt button:hover {
+  opacity: 1;
+}
+.showItem {
+  display: "block";
+}
+
+.hideItem {
+  display: none;
+}
