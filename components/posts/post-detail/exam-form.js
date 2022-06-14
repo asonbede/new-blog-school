@@ -9,12 +9,14 @@ import NotificationContext from "../../../store/notification-context";
 const examdDate = new Date().toLocaleDateString("en-US");
 function ExamForm(props) {
   //const linkPath = `/posts/questions/${props.post.id}/`;
-  const {data:session, status} = useSession();
+  const { data: session, status } = useSession();
   const [name, setName] = useState("");
   const [username, setUserName] = useState("");
   const [examNo, setExamNo] = useState("");
   const [selectedSubjects, setSelectedSubjects] = useState({});
   const [pathValue, setPathValue] = useState("");
+  const [numOfSitting, setnumOfSitting] = useState("");
+
   const notificationCtx = useContext(NotificationContext);
   const router = useRouter();
   const unique_id = uuid();
@@ -31,6 +33,15 @@ function ExamForm(props) {
   //    });
   //    router.push(linkPathForUpdate);
   //  };
+  // if (window) {
+  //   let storeObj = { [props.post.id]: 0 };
+  //   storeObj = JSON.stringfy(storeObj);
+  //   //  window.localStorage.setItem("result-sittings", null);
+  //   window.localStorage.setItem("result-sittings", storeObj);
+  //   // window.localStorage.setItem("blogid", null);
+  //   localPost = JSON.parse(window.localStorage.getItem("result-sittings"));
+  // }
+
   console.log({ pathValue });
   function handleSubmit(event) {
     event.preventDefault();
@@ -82,6 +93,28 @@ function ExamForm(props) {
       status: "success",
     });
 
+    if (window) {
+      const numOfSittingStore = JSON.parse(
+        window.localStorage.getItem("result-sittings")
+      );
+      let storeObj = JSON.stringify({ [props.post.id]: 1 });
+
+      //JSON.stringify(storeObj)
+      //  window.localStorage.setItem("result-sittings", null);
+      //window.localStorage.setItem("result-sittings",  storeObj );
+      // window.localStorage.setItem("blogid", null);
+
+      !numOfSitting
+        ? window.localStorage.setItem("result-sittings", storeObj)
+        : window.localStorage.setItem(
+            "result-sittings",
+            JSON.stringify({
+              ...numOfSittingStore,
+              [props.post.id]: numOfSittingStore[props.post.id] + 1,
+            })
+          );
+    }
+
     router.push(pathValue);
     //props.setexamFormIsOpen(false);
   }
@@ -90,6 +123,22 @@ function ExamForm(props) {
       setName(session.user.name.name);
       setUserName(session.user.name.username);
       //setExamNo()
+      if (window) {
+        // let storeObj= {[props.post.id]:0 }
+
+        //JSON.stringify(storeObj)
+        //  window.localStorage.setItem("result-sittings", null);
+        //window.localStorage.setItem("result-sittings",  storeObj );
+        // window.localStorage.setItem("blogid", null);
+        const numOfSittingStore = JSON.parse(
+          window.localStorage.getItem("result-sittings")
+        );
+        if (!numOfSittingStore) {
+          setnumOfSitting(0);
+        } else {
+          setnumOfSitting(numOfSittingStore[props.post.id]);
+        }
+      }
     }
   }, [session]);
 
@@ -194,6 +243,17 @@ function ExamForm(props) {
                       class="form-control"
                       id="inputExamNo"
                       value={examNo}
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label htmlFor="inputnumOfSitting" class="form-label">
+                      Number of sittings
+                    </label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="inputnumOfSitting"
+                      value={numOfSitting}
                     />
                   </div>
                 </fieldset>

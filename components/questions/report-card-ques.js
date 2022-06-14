@@ -7,12 +7,14 @@ import { useState, useEffect, useContext } from "react";
 import { useSession, signOut } from "next-auth/react";
 import NotificationContext from "../../store/notification-context";
 const examdDateValue = new Date().toLocaleDateString("en-US");
-function ExamForm({ subjects, getSubjectMark, getAverageScore }) {
+function ExamForm({ subjects, getSubjectMark, getAverageScore, blogId }) {
   //const linkPath = `/posts/questions/${props.post.id}/`;
   const { data: session, status } = useSession();
   const [name, setName] = useState("");
   const [username, setUserName] = useState("");
   const [examNo, setExamNo] = useState("");
+  const [sittingsNo, setnumOfSitting] = useState("");
+
   //const [selectedSubjects, setSelectedSubjects] = useState({});
   //const [pathValue, setPathValue] = useState("");
   const [examDate, setExamDate] = useState();
@@ -22,6 +24,47 @@ function ExamForm({ subjects, getSubjectMark, getAverageScore }) {
   const small_id = unique_id.slice(0, 10);
   console.log({ small_id });
   console.log({ examDate });
+
+  // function addQuestionHandler(questionData, typeOfQuestion) {
+  //   notificationCtx.showNotification({
+  //     title: "Sending questions...",
+  //     message: "Your question is currently being stored into a database.",
+  //     status: "pending",
+  //   });
+
+  //   fetch("/api/questions/" + blogId, {
+  //     method: "POST",
+  //     body: JSON.stringify(questionData),
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   })
+  //     .then((response) => {
+  //       if (response.ok) {
+  //         return response.json();
+  //       }
+
+  //       return response.json().then((data) => {
+  //         throw new Error(data.message || "Something went wrong!");
+  //       });
+  //     })
+  //     .then((data) => {
+  //       notificationCtx.showNotification({
+  //         title: "Success!",
+  //         message: "Your question was saved!",
+  //         status: "success",
+  //       });
+
+  //       router.reload(window.location.pathname);
+  //     })
+  //     .catch((error) => {
+  //       notificationCtx.showNotification({
+  //         title: "Error!",
+  //         message: error.message || "Something went wrong!",
+  //         status: "error",
+  //       });
+  //     });
+  // }
 
   //router.push(linkPathForUpdate);
   // const router = useRouter();
@@ -90,24 +133,44 @@ function ExamForm({ subjects, getSubjectMark, getAverageScore }) {
     if (session) {
       setName(session.user.name.name);
       setUserName(session.user.name.username);
-      //setExamNo()
+      const numOfSittingStore = JSON.parse(
+        window.localStorage.getItem("result-sittings")
+      );
+
+      setnumOfSitting(numOfSittingStore);
     }
   }, [session]);
 
   useEffect(() => {
     if (session) {
-      setExamNo(`${small_id}${examdDateValue}`);
+      setExamNo(`${small_id}/${session.user.name.username}${examdDateValue}`);
     }
   }, [name, username]);
   useEffect(() => {
     if (session) {
       setExamDate(examdDateValue);
     }
+
+    if (window) {
+      const numOfSittingStore = JSON.parse(
+        window.localStorage.getItem("result-sittings")
+      );
+      setnumOfSitting(numOfSittingStore[blogId]);
+    }
   }, []);
 
   function capFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
+
+  // function handleSubmitAnswer(e) {
+  //   e.preventDefault()
+  //   const numOfSittingStore = JSON.parse(
+  //     window.localStorage.getItem("result-sittings")
+  //   );
+  //   addQuestionHandler(questionData, reportCard)
+
+  // }
 
   //   useEffect(() => {
   //     if (session) {
@@ -227,6 +290,20 @@ function ExamForm({ subjects, getSubjectMark, getAverageScore }) {
                                 value={examNo}
                               />
                             </div>
+                            <div class="mb-3">
+                              <label
+                                htmlFor="inputExamNoSittings"
+                                class="form-label"
+                              >
+                                Number of sittings
+                              </label>
+                              <input
+                                type="text"
+                                class="form-control"
+                                id="inputExamNoSittings"
+                                value={sittingsNo}
+                              />
+                            </div>
 
                             <div class="mb-3">
                               <label htmlFor="inputDate" class="form-label">
@@ -315,24 +392,28 @@ function ExamForm({ subjects, getSubjectMark, getAverageScore }) {
                                 </em>
                               </span>
                             ) : (
-                              <span class="text-primar fw-bold display-6">
+                              <span class="text-primary fw-bold display-6">
                                 <em> Good. You can do better.</em>
                               </span>
                             )}
                           </fieldset>
-                          {/* <div className="d-flex">
-                  <button type="submit" class="btn btn-primary me-2">
-                    Submit
-                  </button>
+                          <div className="d-flex">
+                            <button
+                              type="submit"
+                              class="btn btn-primary me-2"
+                              title="To reprint this result at a letter date, click the save button, then note the exam number "
+                            >
+                              Save
+                            </button>
 
-                  <button
+                            {/* <button
                     type="button"
                     onClick={() => props.setexamFormIsOpen(false)}
                     class="btn btn-primary"
                   >
                     close
-                  </button>
-                </div> */}
+                  </button> */}
+                          </div>
                         </form>
                       </div>
                     </div>

@@ -124,6 +124,7 @@ const MainQuestionList = ({
                       backToQuestionListHandler={backToQuestionListHandler}
                       subjects={subjects}
                       quesForm={quesForm}
+                      blogId={blogId}
                     />
                   )}
                 </div>

@@ -18,6 +18,7 @@ function QuestionReviewSelect(props) {
   const notificationCtx = useContext(NotificationContext);
   const subjects = props.subjects;
   const quesForm = props.quesForm;
+  const blogId = props.blogId;
   const reviewQuestionObj = notificationCtx.reviewQuestion;
   const {
     selectedValuesOfRadioButton,
@@ -205,6 +206,7 @@ function QuestionReviewSelect(props) {
                 getAverageScore={getAverageScore}
                 subjects={subjects}
                 quesForm={quesForm}
+                blogId={blogId}
               />
             ) : null}
             {selectedReview === "correct-questions" ? (
@@ -217,6 +219,7 @@ function QuestionReviewSelect(props) {
                 getAverageScore={getAverageScore}
                 subjects={subjects}
                 quesForm={quesForm}
+                blogId={blogId}
               />
             ) : null}
             {selectedReview === "incorrect-questions" ? (
@@ -229,6 +232,7 @@ function QuestionReviewSelect(props) {
                 getAverageScore={getAverageScore}
                 subjects={subjects}
                 quesForm={quesForm}
+                blogId={blogId}
               />
             ) : null}
             {selectedReview === "skipped-questions" ? (
@@ -241,6 +245,7 @@ function QuestionReviewSelect(props) {
                 getAverageScore={getAverageScore}
                 subjects={subjects}
                 quesForm={quesForm}
+                blogId={blogId}
               />
             ) : null}
             {controlReviewLink ? (
