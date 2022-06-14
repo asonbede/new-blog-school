@@ -22,6 +22,7 @@ function QuestionAnswerReviewList(props) {
     subjects,
     quesForm,
     blogId,
+    score,
   } = props;
   const [fullLessQuestValue, setfullLessQuestValue] = useState(false);
   console.log({ selectedValuesOfRadioButton, items }, "uuuhh");
@@ -153,7 +154,9 @@ function QuestionAnswerReviewList(props) {
                 toolbarPresent={false}
               />
             </div>
-            {item.examType === "none" || item.examType === undefined ? null : (
+            {item.examType === "none" ||
+            item.examType === "main-exam" ||
+            item.examType === undefined ? null : (
               <span>{item.examType}</span>
             )}
           </div>
@@ -447,6 +450,17 @@ function QuestionAnswerReviewList(props) {
           getSubjectMark={getSubjectMark}
           getAverageScore={getAverageScore}
           blogId={blogId}
+          quesForm={quesForm}
+          reviewQuestionObj={{
+            selectedValuesOfRadioButton,
+            items,
+            correctQuestions,
+            inCorrectQuestions,
+            skippedQuestions,
+            allQuestions,
+            score,
+            selectValue,
+          }}
         />
       )}
     </>
@@ -454,3 +468,21 @@ function QuestionAnswerReviewList(props) {
 }
 
 export default QuestionAnswerReviewList;
+// const index = props.index;
+//   const controlReviewLink = props.controlReviewLink;
+//   const backToQuestionListHandler = props.backToQuestionListHandler;
+//   const notificationCtx = useContext(NotificationContext);
+//   const subjects = props.subjects;
+//   const quesForm = props.quesForm;
+//   const blogId = props.blogId;
+//   const reviewQuestionObj = notificationCtx.reviewQuestion;
+//   const {
+//     selectedValuesOfRadioButton,
+//     currentArray,
+//     correctQuestions,
+//     inCorrectQuestions,
+//     skippedQuestions,
+//     allQuestions,
+//     score,
+//     selectValue,
+//   } = reviewQuestionObj;

@@ -134,7 +134,7 @@ function ExamForm(props) {
           window.localStorage.getItem("result-sittings")
         );
         if (!numOfSittingStore) {
-          setnumOfSitting(0);
+          setnumOfSitting(1);
         } else {
           setnumOfSitting(numOfSittingStore[props.post.id]);
         }

@@ -7,8 +7,18 @@ import { useState, useEffect, useContext } from "react";
 import { useSession, signOut } from "next-auth/react";
 import NotificationContext from "../../store/notification-context";
 const examdDateValue = new Date().toLocaleDateString("en-US");
-function ExamForm({ subjects, getSubjectMark, getAverageScore, blogId }) {
+function ExamForm(props) {
   //const linkPath = `/posts/questions/${props.post.id}/`;
+
+  const {
+    quesForm,
+    subjects,
+    getSubjectMark,
+    getAverageScore,
+    blogId,
+    reviewQuestionObj,
+  } = props;
+
   const { data: session, status } = useSession();
   const [name, setName] = useState("");
   const [username, setUserName] = useState("");
@@ -24,47 +34,47 @@ function ExamForm({ subjects, getSubjectMark, getAverageScore, blogId }) {
   const small_id = unique_id.slice(0, 10);
   console.log({ small_id });
   console.log({ examDate });
+  let numOfSittingStore;
+  function addReportCardHandler(questionData, typeOfQuestion) {
+    notificationCtx.showNotification({
+      title: "Sending questions...",
+      message: "Your question is currently being stored into a database.",
+      status: "pending",
+    });
 
-  // function addQuestionHandler(questionData, typeOfQuestion) {
-  //   notificationCtx.showNotification({
-  //     title: "Sending questions...",
-  //     message: "Your question is currently being stored into a database.",
-  //     status: "pending",
-  //   });
+    fetch("/api/questions/" + blogId, {
+      method: "POST",
+      body: JSON.stringify(questionData),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
 
-  //   fetch("/api/questions/" + blogId, {
-  //     method: "POST",
-  //     body: JSON.stringify(questionData),
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //   })
-  //     .then((response) => {
-  //       if (response.ok) {
-  //         return response.json();
-  //       }
+        return response.json().then((data) => {
+          throw new Error(data.message || "Something went wrong!");
+        });
+      })
+      .then((data) => {
+        notificationCtx.showNotification({
+          title: "Success!",
+          message: "Your question was saved!",
+          status: "success",
+        });
 
-  //       return response.json().then((data) => {
-  //         throw new Error(data.message || "Something went wrong!");
-  //       });
-  //     })
-  //     .then((data) => {
-  //       notificationCtx.showNotification({
-  //         title: "Success!",
-  //         message: "Your question was saved!",
-  //         status: "success",
-  //       });
-
-  //       router.reload(window.location.pathname);
-  //     })
-  //     .catch((error) => {
-  //       notificationCtx.showNotification({
-  //         title: "Error!",
-  //         message: error.message || "Something went wrong!",
-  //         status: "error",
-  //       });
-  //     });
-  // }
+        router.reload(window.location.pathname);
+      })
+      .catch((error) => {
+        notificationCtx.showNotification({
+          title: "Error!",
+          message: error.message || "Something went wrong!",
+          status: "error",
+        });
+      });
+  }
 
   //router.push(linkPathForUpdate);
   // const router = useRouter();
@@ -133,6 +143,11 @@ function ExamForm({ subjects, getSubjectMark, getAverageScore, blogId }) {
     if (session) {
       setName(session.user.name.name);
       setUserName(session.user.name.username);
+      // if (window) {
+      //   numOfSittingStore = JSON.parse(
+      //     window.localStorage.getItem("result-sittings")
+      //   );
+      // }
       const numOfSittingStore = JSON.parse(
         window.localStorage.getItem("result-sittings")
       );
@@ -163,14 +178,25 @@ function ExamForm({ subjects, getSubjectMark, getAverageScore, blogId }) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
-  // function handleSubmitAnswer(e) {
-  //   e.preventDefault()
-  //   const numOfSittingStore = JSON.parse(
-  //     window.localStorage.getItem("result-sittings")
-  //   );
-  //   addQuestionHandler(questionData, reportCard)
+  function handleSubmitAnswer(e) {
+    e.preventDefault();
+    // if (window) {
+    //   numOfSittingStore = JSON.parse(
+    //     window.localStorage.getItem("result-sittings")
+    //   );
+    // }
+    const resultData = {
+      [examNo]: {
+        personalInfo: { examDate, sittingsNo, username, name },
+        subInfo: { blogId, subjects, quesForm, sittingsNo },
+        reviewQuestionObj: { ...reviewQuestionObj },
+      },
+    };
 
-  // }
+    //const numOfSitting = numOfSittingStore[blogId];
+
+    addReportCardHandler(resultData, "reportCard");
+  }
 
   //   useEffect(() => {
   //     if (session) {

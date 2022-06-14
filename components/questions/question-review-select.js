@@ -207,6 +207,7 @@ function QuestionReviewSelect(props) {
                 subjects={subjects}
                 quesForm={quesForm}
                 blogId={blogId}
+                score={score}
               />
             ) : null}
             {selectedReview === "correct-questions" ? (
@@ -220,6 +221,7 @@ function QuestionReviewSelect(props) {
                 subjects={subjects}
                 quesForm={quesForm}
                 blogId={blogId}
+                score={score}
               />
             ) : null}
             {selectedReview === "incorrect-questions" ? (
@@ -233,6 +235,7 @@ function QuestionReviewSelect(props) {
                 subjects={subjects}
                 quesForm={quesForm}
                 blogId={blogId}
+                score={score}
               />
             ) : null}
             {selectedReview === "skipped-questions" ? (
@@ -246,6 +249,7 @@ function QuestionReviewSelect(props) {
                 subjects={subjects}
                 quesForm={quesForm}
                 blogId={blogId}
+                score={score}
               />
             ) : null}
             {controlReviewLink ? (
