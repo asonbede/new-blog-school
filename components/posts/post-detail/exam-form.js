@@ -45,9 +45,10 @@ function ExamForm(props) {
   console.log({ pathValue });
   function handleSubmit(event) {
     event.preventDefault();
+    const examNoValue = `${small_id}/${session.user.name.username}${examdDate}`;
 
     if (getSelectedSubjects().length > 4) {
-      console.log("Not more than two subJEcts IS aloWed");
+      console.log("Not more than two subjects is allowed");
       notificationCtx.showNotification({
         title: "Error!",
         message: "You can not chose more than two subjects at a sitting !",
@@ -113,6 +114,8 @@ function ExamForm(props) {
               [props.post.id]: numOfSittingStore[props.post.id] + 1,
             })
           );
+
+      window.localStorage.setItem("examNo", JSON.stringify(examNoValue));
     }
 
     router.push(pathValue);

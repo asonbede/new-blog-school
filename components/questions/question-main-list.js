@@ -132,7 +132,11 @@ const MainQuestionList = ({
                 <div class="card-body text-center">
                   <button
                     onClick={() => markScript(items)}
-                    disabled={controlSubBtn}
+                    disabled={
+                      controlSubBtn === true || controlReviewLink === true
+                        ? true
+                        : false
+                    }
                     class="btn btn-primary"
                     title="You must answer at lest one question before this button will respond"
                   >

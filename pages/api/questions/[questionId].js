@@ -361,6 +361,50 @@ async function handler(req, res) {
     }
   }
 
+  if (req.method === "PATCH") {
+    const { examNo, personalInfo, subInfo, reviewQuestionObj, typeOfQuestion } =
+      req.body;
+
+    const userEmail = session.user.email;
+
+    const usersCollection = client.db().collection("users");
+
+    const user = await usersCollection.findOne({ email: userEmail });
+
+    if (!user) {
+      res.status(404).json({ message: "User not found." });
+      client.close();
+      return;
+    }
+
+    //check if exam is already taken
+    const examArray = user.results;
+    if (examArray) {
+      const examIsSaved = examArray.find((exam) => exam.examNo === examNo);
+      if (examIsSaved) {
+        res.status(404).json({ message: "Result alrea saved." });
+        client.close();
+        return;
+      }
+    }
+
+    const newResult = {
+      examNo,
+      personalInfo,
+      subInfo,
+      reviewQuestionObj,
+      typeOfQuestion,
+    };
+
+    const result = await usersCollection.updateOne(
+      { email: userEmail },
+      { $push: { results: newResult } }
+    );
+
+    client.close();
+    res.status(200).json({ message: "Result saved updated!" });
+  }
+
   client.close();
 }
 

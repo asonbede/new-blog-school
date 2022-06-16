@@ -19,7 +19,13 @@ function QuestionReviewSelect(props) {
   const subjects = props.subjects;
   const quesForm = props.quesForm;
   const blogId = props.blogId;
-  const reviewQuestionObj = notificationCtx.reviewQuestion;
+  const sittingsNo = props.sittingsNo;
+  const jobType = props.jobType;
+
+  const reviewQuestionObj =
+    props.jobType !== "printOldResult"
+      ? notificationCtx.reviewQuestion
+      : props.reviewQuestionObj;
   const {
     selectedValuesOfRadioButton,
     currentArray,
@@ -208,6 +214,9 @@ function QuestionReviewSelect(props) {
                 quesForm={quesForm}
                 blogId={blogId}
                 score={score}
+                allQuestions={allQuestions}
+                sittingsNo={sittingsNo}
+                jobType={jobType}
               />
             ) : null}
             {selectedReview === "correct-questions" ? (
@@ -222,6 +231,9 @@ function QuestionReviewSelect(props) {
                 quesForm={quesForm}
                 blogId={blogId}
                 score={score}
+                allQuestions={allQuestions}
+                sittingsNo={sittingsNo}
+                jobType={jobType}
               />
             ) : null}
             {selectedReview === "incorrect-questions" ? (
@@ -236,6 +248,9 @@ function QuestionReviewSelect(props) {
                 quesForm={quesForm}
                 blogId={blogId}
                 score={score}
+                allQuestions={allQuestions}
+                sittingsNo={sittingsNo}
+                jobType={jobType}
               />
             ) : null}
             {selectedReview === "skipped-questions" ? (
@@ -250,6 +265,9 @@ function QuestionReviewSelect(props) {
                 quesForm={quesForm}
                 blogId={blogId}
                 score={score}
+                allQuestions={allQuestions}
+                sittingsNo={sittingsNo}
+                jobType={jobType}
               />
             ) : null}
             {controlReviewLink ? (

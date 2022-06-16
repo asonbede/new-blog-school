@@ -19,10 +19,13 @@ function QuestionAnswerReviewList(props) {
     selectValue,
     getSubjectMark,
     getAverageScore,
+    allQuestions,
     subjects,
     quesForm,
     blogId,
     score,
+    sittingsNo,
+    jobType,
   } = props;
   const [fullLessQuestValue, setfullLessQuestValue] = useState(false);
   console.log({ selectedValuesOfRadioButton, items }, "uuuhh");
@@ -461,6 +464,8 @@ function QuestionAnswerReviewList(props) {
             score,
             selectValue,
           }}
+          sittingsNo={sittingsNo}
+          jobType={jobType}
         />
       )}
     </>

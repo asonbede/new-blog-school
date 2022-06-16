@@ -24,6 +24,7 @@ function ExamForm(props) {
   const [username, setUserName] = useState("");
   const [examNo, setExamNo] = useState("");
   const [sittingsNo, setnumOfSitting] = useState("");
+  const [submitButControl, setsubmitButControl] = useState(true);
 
   //const [selectedSubjects, setSelectedSubjects] = useState({});
   //const [pathValue, setPathValue] = useState("");
@@ -34,47 +35,47 @@ function ExamForm(props) {
   const small_id = unique_id.slice(0, 10);
   console.log({ small_id });
   console.log({ examDate });
-  let numOfSittingStore;
-  function addReportCardHandler(questionData, typeOfQuestion) {
-    notificationCtx.showNotification({
-      title: "Sending questions...",
-      message: "Your question is currently being stored into a database.",
-      status: "pending",
-    });
+  //let numOfSittingStore;
+  // function addReportCardHandler(questionData, typeOfQuestion) {
+  //   notificationCtx.showNotification({
+  //     title: "Sending questions...",
+  //     message: "Your question is currently being stored into a database.",
+  //     status: "pending",
+  //   });
 
-    fetch("/api/questions/" + blogId, {
-      method: "POST",
-      body: JSON.stringify(questionData),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        }
+  //   fetch("/api/questions/" + blogId, {
+  //     method: "POST",
+  //     body: JSON.stringify(questionData),
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   })
+  //     .then((response) => {
+  //       if (response.ok) {
+  //         return response.json();
+  //       }
 
-        return response.json().then((data) => {
-          throw new Error(data.message || "Something went wrong!");
-        });
-      })
-      .then((data) => {
-        notificationCtx.showNotification({
-          title: "Success!",
-          message: "Your question was saved!",
-          status: "success",
-        });
+  //       return response.json().then((data) => {
+  //         throw new Error(data.message || "Something went wrong!");
+  //       });
+  //     })
+  //     .then((data) => {
+  //       notificationCtx.showNotification({
+  //         title: "Success!",
+  //         message: "Your question was saved!",
+  //         status: "success",
+  //       });
 
-        router.reload(window.location.pathname);
-      })
-      .catch((error) => {
-        notificationCtx.showNotification({
-          title: "Error!",
-          message: error.message || "Something went wrong!",
-          status: "error",
-        });
-      });
-  }
+  //       router.reload(window.location.pathname);
+  //     })
+  //     .catch((error) => {
+  //       notificationCtx.showNotification({
+  //         title: "Error!",
+  //         message: error.message || "Something went wrong!",
+  //         status: "error",
+  //       });
+  //     });
+  // }
 
   //router.push(linkPathForUpdate);
   // const router = useRouter();
@@ -158,9 +159,16 @@ function ExamForm(props) {
 
   useEffect(() => {
     if (session) {
-      setExamNo(`${small_id}/${session.user.name.username}${examdDateValue}`);
+      if (window) {
+        const examNumStore = JSON.parse(window.localStorage.getItem("examNo"));
+        if (examNumStore) {
+          setExamNo(examNumStore);
+        } else {
+          setExamNo(session.user.name.username);
+        }
+      }
     }
-  }, [name, username]);
+  }, []);
   useEffect(() => {
     if (session) {
       setExamDate(examdDateValue);
@@ -170,7 +178,11 @@ function ExamForm(props) {
       const numOfSittingStore = JSON.parse(
         window.localStorage.getItem("result-sittings")
       );
-      setnumOfSitting(numOfSittingStore[blogId]);
+      setnumOfSitting(
+        props.jobType !== "printOldResult"
+          ? numOfSittingStore[blogId]
+          : props.sittingsNo
+      );
     }
   }, []);
 
@@ -185,17 +197,56 @@ function ExamForm(props) {
     //     window.localStorage.getItem("result-sittings")
     //   );
     // }
+    notificationCtx.showNotification({
+      title: "Storng report card...",
+      message: "Your result is currently being stored into a database.",
+      status: "pending",
+    });
+
     const resultData = {
-      [examNo]: {
-        personalInfo: { examDate, sittingsNo, username, name },
-        subInfo: { blogId, subjects, quesForm, sittingsNo },
-        reviewQuestionObj: { ...reviewQuestionObj },
-      },
+      examNo: examNo,
+      personalInfo: { examDate, sittingsNo, username, name },
+      subInfo: { blogId, subjects, quesForm, sittingsNo },
+      reviewQuestionObj: { ...reviewQuestionObj },
+      typeOfQuestion: "report-card",
     };
+
+    fetch("/api/questions/" + blogId, {
+      method: "POST",
+      body: JSON.stringify(resultData),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+
+        return response.json().then((data) => {
+          throw new Error(data.message || "Something went wrong!");
+        });
+      })
+      .then((data) => {
+        notificationCtx.showNotification({
+          title: "Success!",
+          message: "Your question was saved!",
+          status: "success",
+        });
+        setsubmitButControl(false);
+        //router.reload(window.location.pathname);
+      })
+      .catch((error) => {
+        notificationCtx.showNotification({
+          title: "Error!",
+          message: error.message || "Something went wrong!",
+          status: "error",
+        });
+      });
 
     //const numOfSitting = numOfSittingStore[blogId];
 
-    addReportCardHandler(resultData, "reportCard");
+    //addReportCardHandler(resultData, "reportCard");
   }
 
   //   useEffect(() => {
@@ -227,6 +278,10 @@ function ExamForm(props) {
   //     }
   //     return subjectArray;
   //   }
+
+  // props.jobType !== "printOldResult"
+  //   sittingsNo={sittingsNo}
+  //   jobType={jobType}
 
   return (
     <div class="accordion accordion-flush" id="report-card">
@@ -277,7 +332,7 @@ function ExamForm(props) {
                   <div class="col-12">
                     <div class="card m-1 w-100">
                       <div class="card-body text-center">
-                        <form>
+                        <form onSubmit={handleSubmitAnswer}>
                           <fieldset class="border p-2">
                             <legend class="float-none w-auto p-2">
                               Personal Info:
@@ -424,13 +479,16 @@ function ExamForm(props) {
                             )}
                           </fieldset>
                           <div className="d-flex">
-                            <button
-                              type="submit"
-                              class="btn btn-primary me-2"
-                              title="To reprint this result at a letter date, click the save button, then note the exam number "
-                            >
-                              Save
-                            </button>
+                            {submitButControl &&
+                              props.jobType !== "printOldResult" && (
+                                <button
+                                  type="submit"
+                                  class="btn btn-primary me-2"
+                                  title="To reprint this result at a letter date, click the save button, then note the exam number "
+                                >
+                                  Save
+                                </button>
+                              )}
 
                             {/* <button
                     type="button"
