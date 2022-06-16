@@ -21,6 +21,8 @@ function QuestionReviewSelect(props) {
   const blogId = props.blogId;
   const sittingsNo = props.sittingsNo;
   const jobType = props.jobType;
+  const examNo = props.examNo;
+  const examDate = props.personalInfo?.examDate;
 
   const reviewQuestionObj =
     props.jobType !== "printOldResult"
@@ -29,6 +31,7 @@ function QuestionReviewSelect(props) {
   const {
     selectedValuesOfRadioButton,
     currentArray,
+
     correctQuestions,
     inCorrectQuestions,
     skippedQuestions,
@@ -36,6 +39,10 @@ function QuestionReviewSelect(props) {
     score,
     selectValue,
   } = reviewQuestionObj;
+
+  if (props.jobType !== "printOldResult") {
+  } else {
+  }
 
   // console.log({ items }, "jjhh");
   console.log({ correctQuestions }, "jjcc");
@@ -217,6 +224,8 @@ function QuestionReviewSelect(props) {
                 allQuestions={allQuestions}
                 sittingsNo={sittingsNo}
                 jobType={jobType}
+                examNo={examNo}
+                examDate={examDate}
               />
             ) : null}
             {selectedReview === "correct-questions" ? (
@@ -234,6 +243,8 @@ function QuestionReviewSelect(props) {
                 allQuestions={allQuestions}
                 sittingsNo={sittingsNo}
                 jobType={jobType}
+                examNo={examNo}
+                examDate={examDate}
               />
             ) : null}
             {selectedReview === "incorrect-questions" ? (
@@ -251,6 +262,8 @@ function QuestionReviewSelect(props) {
                 allQuestions={allQuestions}
                 sittingsNo={sittingsNo}
                 jobType={jobType}
+                examNo={examNo}
+                examDate={examDate}
               />
             ) : null}
             {selectedReview === "skipped-questions" ? (
@@ -268,6 +281,8 @@ function QuestionReviewSelect(props) {
                 allQuestions={allQuestions}
                 sittingsNo={sittingsNo}
                 jobType={jobType}
+                examNo={examNo}
+                examDate={examDate}
               />
             ) : null}
             {controlReviewLink ? (

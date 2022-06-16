@@ -26,6 +26,8 @@ function QuestionAnswerReviewList(props) {
     score,
     sittingsNo,
     jobType,
+    examNo,
+    examDate,
   } = props;
   const [fullLessQuestValue, setfullLessQuestValue] = useState(false);
   console.log({ selectedValuesOfRadioButton, items }, "uuuhh");
@@ -456,7 +458,7 @@ function QuestionAnswerReviewList(props) {
           quesForm={quesForm}
           reviewQuestionObj={{
             selectedValuesOfRadioButton,
-            items,
+            currentArray: items,
             correctQuestions,
             inCorrectQuestions,
             skippedQuestions,
@@ -466,6 +468,8 @@ function QuestionAnswerReviewList(props) {
           }}
           sittingsNo={sittingsNo}
           jobType={jobType}
+          examNo={examNo}
+          examDate={examDate}
         />
       )}
     </>

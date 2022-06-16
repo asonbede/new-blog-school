@@ -8,7 +8,7 @@ import MenuButton from "../auth/menu-button";
 import NotificationContext from "../../store/notification-context";
 function MainNavigation() {
   const [isNavExpanded, setIsNavExpanded] = useState(false);
-  const {data:session, status} = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
   const notificationCtx = useContext(NotificationContext);
   //if (status === 'loading') return
@@ -76,12 +76,9 @@ function MainNavigation() {
   >
     Start The Enrollment
   </button>;
-   if (status === 'loading'){
-    return(
-      <div>loading.....</div>
-    )
-   }
-    
+  if (status === "loading") {
+    return <div>loading.....</div>;
+  }
 
   return (
     <nav
@@ -125,7 +122,7 @@ function MainNavigation() {
                 <a className="nav-link">Contact</a>
               </Link>
             </li>
-            {!session &&  (
+            {!session && (
               <li className="nav-item">
                 <Link href="/auth">
                   <a className="nav-link">Login</a>
@@ -201,6 +198,15 @@ function MainNavigation() {
                   </li>
                   <li>
                     <button
+                      data-bs-toggle="modal"
+                      data-bs-target="#retrievResult"
+                      className="dropdown-item"
+                    >
+                      Retriev Result
+                    </button>
+                  </li>
+                  <li>
+                    <button
                       onClick={handleDeleteAccount}
                       className="dropdown-item"
                     >
@@ -220,6 +226,12 @@ function MainNavigation() {
   );
 }
 export default MainNavigation;
+// class="modal fade"
+//         id="retrievResult"
+//         tabIndex="-6"
+//         aria-labelledby="retrievResultLabel"
+//         aria-hidden="true"
+
 // <nav className={classes.navigation}>
 //   {/* <a href="/" className="brand-name">
 //     MacroSoft

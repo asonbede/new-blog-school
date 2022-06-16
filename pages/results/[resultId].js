@@ -38,13 +38,14 @@ function QuestionReviewSelectPage(props) {
 //export the page
 export default QuestionReviewSelectPage;
 export async function getServerSideProps(context) {
+  console.log("called1466");
   const session = await getSession({ req: context.req });
-  const paramValue = context.params.profileId;
+  const paramValue = context.params.resultId;
   //const { name, description, imageLink } = context.query;
   //let name, description, imageLink ;
-  console.log({ paramValue }, "from profileID");
+  console.log({ paramValue }, "from examNoID1");
   //const queryDescription = context.query.description;
-  console.log({ session }, "in profile");
+  console.log({ session }, "from examNoID2");
   if (!session) {
     return {
       notFound: true,
@@ -67,13 +68,14 @@ export async function getServerSideProps(context) {
         notFound: true,
       };
     }
-
+    console.log("result found");
     const examItem = results.find((exam) => exam.examNo === paramValue);
     if (!examItem) {
       return {
         notFound: true,
       };
     }
+    console.log("result last");
     const { examNo, personalInfo, subInfo, reviewQuestionObj, typeOfQuestion } =
       examItem;
 

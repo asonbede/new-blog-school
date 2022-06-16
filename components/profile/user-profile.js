@@ -14,11 +14,12 @@ import UpdateAuthForm from "../auth/auth-update-form";
 import DeleteAccountForm from "../auth/delete-account-form";
 import ProfileImageUploadform from "./profile-image-upload-form";
 import ReviewTestimonialform from "./review-testimonial";
+import ResultRetrivForm from "./print-old-result";
 // import ExamForm from "../posts/post-detail/exam-form";
 //import PostContent from "../posts/post-detail/post-content";
 function UserProfile(props) {
   //const [session, loading] = useSession();
-  const {data:session, status} = useSession();
+  const { data: session, status } = useSession();
   const [heroIsOpen, setheroIsOpen] = useState(true);
   // const [isLoading, setIsLoading] = useState(true);
   const notificationCtx = useContext(NotificationContext);
@@ -108,6 +109,7 @@ function UserProfile(props) {
         onChangeReview={onChangeReview}
         review={props.review}
       />
+      <ResultRetrivForm />
     </>
   );
 }

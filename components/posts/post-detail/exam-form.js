@@ -6,7 +6,8 @@ import { useRouter } from "next/router";
 import { useState, useEffect, useContext } from "react";
 import { useSession, signOut } from "next-auth/react";
 import NotificationContext from "../../../store/notification-context";
-const examdDate = new Date().toLocaleDateString("en-US");
+let examdDate = new Date().toLocaleDateString("en-US");
+examdDate = examdDate.replaceAll("/", "-");
 function ExamForm(props) {
   //const linkPath = `/posts/questions/${props.post.id}/`;
   const { data: session, status } = useSession();
@@ -45,7 +46,7 @@ function ExamForm(props) {
   console.log({ pathValue });
   function handleSubmit(event) {
     event.preventDefault();
-    const examNoValue = `${small_id}/${session.user.name.username}${examdDate}`;
+    const examNoValue = `${small_id}_${session.user.name.username}_${examdDate}_${props.post.authorusername}`;
 
     if (getSelectedSubjects().length > 4) {
       console.log("Not more than two subjects is allowed");

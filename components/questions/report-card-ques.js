@@ -149,40 +149,48 @@ function ExamForm(props) {
       //     window.localStorage.getItem("result-sittings")
       //   );
       // }
-      const numOfSittingStore = JSON.parse(
-        window.localStorage.getItem("result-sittings")
-      );
+      // const numOfSittingStore = JSON.parse(
+      //   window.localStorage.getItem("result-sittings")
+      // );
 
-      setnumOfSitting(numOfSittingStore);
+      // setnumOfSitting(numOfSittingStore);
     }
   }, [session]);
 
   useEffect(() => {
     if (session) {
       if (window) {
-        const examNumStore = JSON.parse(window.localStorage.getItem("examNo"));
-        if (examNumStore) {
-          setExamNo(examNumStore);
+        if (props.jobType !== "printOldResult") {
+          const examNumStore = JSON.parse(
+            window.localStorage.getItem("examNo")
+          );
+          if (examNumStore) {
+            setExamNo(examNumStore);
+          } else {
+            setExamNo(session.user.name.username);
+          }
         } else {
-          setExamNo(session.user.name.username);
+          setExamNo(props.examNo);
         }
       }
     }
   }, []);
   useEffect(() => {
     if (session) {
-      setExamDate(examdDateValue);
-    }
+      setExamDate(
+        props.jobType !== "printOldResult" ? examdDateValue : props.examDate
+      );
 
-    if (window) {
-      const numOfSittingStore = JSON.parse(
-        window.localStorage.getItem("result-sittings")
-      );
-      setnumOfSitting(
-        props.jobType !== "printOldResult"
-          ? numOfSittingStore[blogId]
-          : props.sittingsNo
-      );
+      if (window) {
+        const numOfSittingStore = JSON.parse(
+          window.localStorage.getItem("result-sittings")
+        );
+        setnumOfSitting(
+          props.jobType !== "printOldResult"
+            ? numOfSittingStore[blogId]
+            : props.sittingsNo
+        );
+      }
     }
   }, []);
 
@@ -212,7 +220,7 @@ function ExamForm(props) {
     };
 
     fetch("/api/questions/" + blogId, {
-      method: "POST",
+      method: "PATCH",
       body: JSON.stringify(resultData),
       headers: {
         "Content-Type": "application/json",
@@ -230,7 +238,7 @@ function ExamForm(props) {
       .then((data) => {
         notificationCtx.showNotification({
           title: "Success!",
-          message: "Your question was saved!",
+          message: "Your result was saved!",
           status: "success",
         });
         setsubmitButControl(false);
@@ -318,7 +326,7 @@ function ExamForm(props) {
                   <div class="d-flex justify-content-between align-items-center">
                     <img
                       // className={classes["post-image"]}
-                      src={session.user.image.imageUrl}
+                      src={session ? session.user.image.imageUrl : ""}
                       class="rounded-circle mb-3 mr-3 img-fluid"
                       alt="card image"
                       style={{ width: "20%" }}
@@ -465,7 +473,7 @@ function ExamForm(props) {
                                   <em> You are good to go.</em>{" "}
                                 </p>
                               </span>
-                            ) : getAverageScore() <= 40 ? (
+                            ) : getAverageScore() <= 50 ? (
                               <span class="text-danger fw-bold display-6">
                                 <em>
                                   Poor performance but you can still make it.

@@ -382,7 +382,7 @@ async function handler(req, res) {
     if (examArray) {
       const examIsSaved = examArray.find((exam) => exam.examNo === examNo);
       if (examIsSaved) {
-        res.status(404).json({ message: "Result alrea saved." });
+        res.status(404).json({ message: "Result already saved." });
         client.close();
         return;
       }
@@ -401,7 +401,7 @@ async function handler(req, res) {
       { $push: { results: newResult } }
     );
 
-    client.close();
+    // client.close();
     res.status(200).json({ message: "Result saved updated!" });
   }
 

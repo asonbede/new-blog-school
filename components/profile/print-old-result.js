@@ -6,18 +6,36 @@ import NotificationContext from "../../store/notification-context";
 
 import { useSession, signOut } from "next-auth/react";
 
-function ReviewForm(props) {
-  const passwordRef = useRef();
+// async function onChangeReview(reviewData) {
+//   const response = await fetch("/api/user/review", {
+//     method: "PATCH",
+//     body: JSON.stringify(reviewData),
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//   });
+
+//   const data = await response.json();
+
+//   //console.log(data);
+//   if (!response.ok) {
+//     throw new Error(data.message || "Something went wrong!");
+//   }
+// }
+
+function ResultRetrivForm(props) {
+  const resultRetrivRef = useRef();
+  const ref = useRef(null);
   const reviewRef = useRef();
   const notificationCtx = useContext(NotificationContext);
   //const [session, loading] = useSession();
   const { data: session, status } = useSession();
   const [name, setName] = useState();
   const [username, setuserName] = useState();
-  const [review, setreview] = useState();
+  // const [review, setreview] = useState();
   const [isSuccess, setisSuccess] = useState(true);
   const router = useRouter();
-  const ref = useRef(null);
+
   console.log({ session });
   //   function logoutHandler() {
   //     signOut();
@@ -26,15 +44,16 @@ function ReviewForm(props) {
     if (session) {
       setName(session.user.name.name);
       setuserName(session.user.name.username);
-      setreview(props.review);
+      // setreview(props.review);
     }
   }, []);
   async function submitHandler(event) {
     event.preventDefault();
 
-    const enteredPassword = passwordRef.current.value;
+    const enteredExamNo = resultRetrivRef.current.value;
+    // const enteredExamNo = "55555666";
     // const enteredReview = reviewRef.current.value;
-
+    console.log({ enteredExamNo });
     // optional: Add validation
 
     notificationCtx.showNotification({
@@ -44,12 +63,12 @@ function ReviewForm(props) {
     });
 
     try {
-      await props.onChangeReview({
-        password: enteredPassword,
-        review: review,
-        name,
-        username,
-      });
+      // await props.onChangeReview({
+      //   examNo: enteredExamNo,
+
+      //   name,
+      //   username,
+      // });
       console.log(ref.current, "MODAL");
       notificationCtx.showNotification({
         title: "Success!",
@@ -58,8 +77,8 @@ function ReviewForm(props) {
       });
       // setisSuccess(false);
 
-      ref.current.click();
-      router.push("/reviews-testimonial");
+      router.push(`/results/${enteredExamNo}`);
+      // ref.current.click();
     } catch (error) {
       notificationCtx.showNotification({
         title: "Error!",
@@ -73,16 +92,16 @@ function ReviewForm(props) {
     <>
       <div
         class="modal fade"
-        id="reviewTestimonial"
-        tabIndex="-3"
-        aria-labelledby="reviewTestimonialLabel"
+        id="retrievResult"
+        tabIndex="-6"
+        aria-labelledby="retrievResultLabel"
         aria-hidden="true"
       >
         <div class="modal-dialog" style={{ zIndex: 0 }}>
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="reviewTestimonialLabel">
-                Review/Testimonial
+              <h5 class="modal-title" id="retrievResult">
+                Retriev Result
               </h5>
               <button
                 type="button"
@@ -92,22 +111,8 @@ function ReviewForm(props) {
               ></button>
             </div>
             <div class="modal-body">
-              <p class="lead">
-                Fill out this form to write/update your review{" "}
-              </p>
+              <p class="lead">Fill out this form to Retriev your result </p>
               <form onSubmit={submitHandler}>
-                <div class="mb-3">
-                  <label htmlFor="password" class="col-form-label">
-                    New Password:
-                  </label>
-                  <input
-                    class="form-control"
-                    type="password"
-                    id="password"
-                    ref={passwordRef}
-                    required
-                  />
-                </div>
                 <div class="mb-3">
                   <label htmlFor="name" class="form-label">
                     Name
@@ -132,33 +137,31 @@ function ReviewForm(props) {
                   />
                 </div>
                 <div class="mb-3">
-                  <label htmlFor="review" class="form-label">
-                    Write your review or testimonial
+                  <label htmlFor="exam-no" class="col-form-label">
+                    Exam Number :
                   </label>
-                  <textarea
+                  <input
                     class="form-control"
-                    id="review"
-                    rows="3"
-                    placeholder="What do you think about our services. Write your review or testimonial"
-                    // ref={reviewRef}
-                    value={review}
-                    onChange={(e) => setreview(e.target.value)}
-                  ></textarea>
+                    type="text"
+                    id="exam-no"
+                    ref={resultRetrivRef}
+                    required
+                  />
                 </div>
 
-                <div class="modal-body">
-                  <div class="modal-footer">
-                    <button
-                      type="button"
-                      class="btn btn-secondary"
-                      data-bs-dismiss="modal"
-                      ref={ref}
-                    >
-                      Close
-                    </button>
-                    <button class="btn btn-primary">Submit</button>
-                  </div>
+                {/* <div class="modal-body"> */}
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                    ref={ref}
+                  >
+                    Close
+                  </button>
+                  <button class="btn btn-primary">Submit</button>
                 </div>
+                {/* </div> */}
               </form>
             </div>
           </div>
@@ -168,4 +171,4 @@ function ReviewForm(props) {
   );
 }
 
-export default ReviewForm;
+export default ResultRetrivForm;
