@@ -30,6 +30,7 @@ function Questions(props) {
   const [changerValue, setChangerValue] = useState(false);
   const [isLoading, setisLoading] = useState(true);
   const [controlLiActive, setcontrolLiActive] = useState();
+  const [questionsListunaswer, setunanweredQuestionsList] = useState([]);
 
   //const [session, loading] = useSession();
   const { data: session, status } = useSession();
@@ -38,7 +39,8 @@ function Questions(props) {
   //console.log({ items }, "fro,m questions");
   //console.log({ blogId }, "in questionsjs");
   const noteFormRef = useRef(null);
-
+  const refBut = useRef(null);
+  //const unanweredQuestionsList = [];
   //commendation message tittle
   function checkMessageTitle() {
     const performance = Math.round((score / currentArray.length) * 100);
@@ -184,6 +186,58 @@ function Questions(props) {
   // -----------------------------------------------------------------
 
   console.log({ currentArray }, "checking essay-type11111");
+  function checkExamSkipped(skippedIndexArr) {
+    // for (let index = 0; index < currentArray.length; index++) {
+    //  if ( index+1 ) {
+
+    //  }
+    //   const element = currentArray[index];
+
+    // }
+    console.log({ skippedIndexArr }, "ques00");
+    let objNumSub = {};
+    let elementList = [];
+    const skippedArr = currentArray.filter((item, i) =>
+      skippedIndexArr.includes(i + 1)
+    );
+    console.log({ skippedArr }, "ques1");
+    for (let index = 0; index < skippedArr.length; index++) {
+      const element = skippedArr[index];
+      const subj = element.subject;
+      const subIndex = element.numIndex;
+      if (subj in objNumSub) {
+        objNumSub = { ...objNumSub, [subj]: [...objNumSub[subj], subIndex] };
+      } else {
+        objNumSub = { ...objNumSub, [subj]: [subIndex] };
+      }
+    }
+    console.log({ objNumSub }, "ques2");
+    for (const key in objNumSub) {
+      if (Object.hasOwnProperty.call(objNumSub, key)) {
+        const element = objNumSub[key];
+
+        elementList.push(
+          <tr key={key}>
+            <td>{key}</td>
+            <td colSpan={3}>{element.join(", ")}</td>
+          </tr>
+        );
+      }
+    }
+    return (
+      <>
+        <table class="table table-dark table-hover table-sm">
+          <thead>
+            <tr>
+              <th>Subject</th>
+              <th colSpan={3}>Skipped question</th>
+            </tr>
+          </thead>
+          <tbody>{elementList}</tbody>
+        </table>
+      </>
+    );
+  }
 
   function setCurrentArrayHandler(arrayCurrent) {
     console.log("in useeff question-one");
@@ -310,10 +364,13 @@ function Questions(props) {
     //the assessment process if the student wants to return to the
     //skipped question
     if (skippedQuestionsList.length) {
-      const confirmAns =
-        confirm(`You have skipped questions ${unanweredQuestionsList.join(",")} 
-    if you click ok your script will be assessed without the skipped questions`);
-      if (confirmAns) {
+      setunanweredQuestionsList(unanweredQuestionsList);
+      refBut.current.click();
+      //   const confirmAns =
+      //     confirm(`You have skipped questions ${unanweredQuestionsList.join(",")}
+      // if you click ok your script will be assessed without the skipped questions`);
+
+      if ("") {
         console.log({ selectedValuesOfRadioButton }, "inConfirm");
 
         setcontrolReviewLink(true);
@@ -521,6 +578,58 @@ For easy type questions
 
   return (
     <>
+      {/* <!-- Button trigger modal --> */}
+
+      <button
+        style={{ display: "none" }}
+        ref={refBut}
+        type="button"
+        class="btn btn-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#exampleModal"
+      >
+        Launch demo modal
+      </button>
+
+      {/* <!-- Modal --> */}
+      <div
+        class="modal fade"
+        id="exampleModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">
+                Skipped Questions Alert
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              {checkExamSkipped(questionsListunaswer)}
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button type="button" class="btn btn-primary">
+                Save changes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
       {/* <section className={classes.questions} class="p-5 bg-primary">
       <div className={classes.control}>
         <button onClick={toggleQuestionsHandler}>
