@@ -35,6 +35,7 @@ function ExamForm(props) {
   const small_id = unique_id.slice(0, 10);
   console.log({ small_id });
   console.log({ examDate });
+  const watchResult = props.jobType;
   //let numOfSittingStore;
   // function addReportCardHandler(questionData, typeOfQuestion) {
   //   notificationCtx.showNotification({
@@ -141,6 +142,15 @@ function ExamForm(props) {
   //     router.push(pathValue);
   //   }
   useEffect(() => {
+    if (session && props.jobType === "printOldResult") {
+      notificationCtx.showNotification({
+        title: "Success!",
+        message: "Result  retrival was successfully!",
+        status: "success",
+      });
+    }
+  }, [session, watchResult]);
+  useEffect(() => {
     if (session) {
       setName(session.user.name.name);
       setUserName(session.user.name.username);
@@ -156,7 +166,7 @@ function ExamForm(props) {
       // setnumOfSitting(numOfSittingStore);
     }
   }, [session]);
-
+  //set exam number
   useEffect(() => {
     if (session) {
       if (window) {
@@ -174,7 +184,8 @@ function ExamForm(props) {
         }
       }
     }
-  }, []);
+  }, [session]);
+  //set exam date
   useEffect(() => {
     if (session) {
       setExamDate(
@@ -192,7 +203,7 @@ function ExamForm(props) {
         );
       }
     }
-  }, []);
+  }, [session]);
 
   function capFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);

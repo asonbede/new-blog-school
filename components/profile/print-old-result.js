@@ -70,15 +70,15 @@ function ResultRetrivForm(props) {
       //   username,
       // });
       console.log(ref.current, "MODAL");
-      notificationCtx.showNotification({
-        title: "Success!",
-        message: "Your review was successfully submitted!",
-        status: "success",
-      });
+      // notificationCtx.showNotification({
+      //   title: "Success!",
+      //   message: "Result  retrival was successfully!",
+      //   status: "success",
+      // });
       // setisSuccess(false);
 
       router.push(`/results/${enteredExamNo}`);
-      // ref.current.click();
+      ref.current.click();
     } catch (error) {
       notificationCtx.showNotification({
         title: "Error!",
