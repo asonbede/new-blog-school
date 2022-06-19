@@ -31,6 +31,8 @@ function Questions(props) {
   const [isLoading, setisLoading] = useState(true);
   const [controlLiActive, setcontrolLiActive] = useState();
   const [questionsListunaswer, setunanweredQuestionsList] = useState([]);
+  const [controlSkipped, setcontrolSkipped] = useState(false);
+  const [controlSkippedGlo, setsubSkippedValue] = useState();
 
   //const [session, loading] = useSession();
   const { data: session, status } = useSession();
@@ -38,8 +40,10 @@ function Questions(props) {
   const { questions: items, blogId, questionType, subjects, quesForm } = props;
   //console.log({ items }, "fro,m questions");
   //console.log({ blogId }, "in questionsjs");
+  let myTimeOutVar;
   const noteFormRef = useRef(null);
   const refBut = useRef(null);
+  const confirmBut = useRef(null);
   //const unanweredQuestionsList = [];
   //commendation message tittle
   function checkMessageTitle() {
@@ -92,7 +96,18 @@ function Questions(props) {
         setselectValue("mult-choice-one");
       }
     }
+    // setcontrolSkipped(false);
   }, []);
+  // useEffect(() => {
+  //   if (controlSkippedGlo) {
+  //     refBut.current.click();
+  //   }
+  // }, [controlSkippedGlo]);
+  // useEffect(() => {
+  //   if (questionsListunaswer.length) {
+  //     removeSkipped(selectedValuesOfRadioButton, questionsListunaswer);
+  //   }
+  // }, [questionsListunaswer]);
 
   useEffect(() => {
     console.log({ inCorrectQuestions }, "inUseffect");
@@ -116,6 +131,9 @@ function Questions(props) {
         message: `Your answer script was successfully assessed! ${showerPraises()} To return to the question, click the back to question button.`,
         status: `${determineStatus()}`,
       });
+      // if (controlSkipped) {
+      //   confirmBut.current.click();
+      // }
     }
   }, [score]);
 
@@ -187,18 +205,18 @@ function Questions(props) {
 
   console.log({ currentArray }, "checking essay-type11111");
   function checkExamSkipped(skippedIndexArr) {
-    // for (let index = 0; index < currentArray.length; index++) {
-    //  if ( index+1 ) {
-
-    //  }
-    //   const element = currentArray[index];
-
-    // }
+    if (quesForm === "rev-ques") {
+      return (
+        <>
+          <p class="text-warning">{skippedIndexArr.join(", ")}</p>
+        </>
+      );
+    }
     console.log({ skippedIndexArr }, "ques00");
     let objNumSub = {};
     let elementList = [];
     const skippedArr = currentArray.filter((item, i) =>
-      skippedIndexArr.includes(i + 1)
+      skippedIndexArr?.includes(i + 1)
     );
     console.log({ skippedArr }, "ques1");
     for (let index = 0; index < skippedArr.length; index++) {
@@ -226,7 +244,7 @@ function Questions(props) {
     }
     return (
       <>
-        <table class="table table-dark table-hover table-sm">
+        <table class="table table-success table-striped table-hover table-sm">
           <thead>
             <tr>
               <th>Subject</th>
@@ -235,6 +253,12 @@ function Questions(props) {
           </thead>
           <tbody>{elementList}</tbody>
         </table>
+        <p class="text-danger fw-bold">
+          You have skipped the above question(s), if you click the continue
+          button, your script will be submitted and graded without the skipped
+          question(s). To return to the exam hall and tackle the skipped
+          question(s), click the cancel button{" "}
+        </p>
       </>
     );
   }
@@ -291,6 +315,81 @@ function Questions(props) {
     console.log({ selectedValuesOfRadioButton });
   };
 
+  function removeSkipped(obj, arr) {
+    console.log({ arr });
+    let updatedObject;
+    // [`studentChoiceForQuestion${index + 1}`]: "go==",
+    // [`correctOptionForQuestion${index + 1}`]: questionObj.correctOption,
+    for (let index = 0; index < arr.length; index++) {
+      const ele = arr[index];
+      const choiceKey = `studentChoiceForQuestion${ele}`;
+      const corrKey = `correctOptionForQuestion${ele}`;
+
+      delete obj[choiceKey];
+      delete obj[corrKey];
+    }
+    console.log({ obj }, "from updateee");
+    setselectedValuesOfRadioButton(obj);
+  }
+
+  function removeSkipped2(obj, arr) {
+    console.log({ arr });
+    let updatedObject;
+    // [`studentChoiceForQuestion${index + 1}`]: "go==",
+    // [`correctOptionForQuestion${index + 1}`]: questionObj.correctOption,
+    for (let index = 0; index < arr.length; index++) {
+      const ele = arr[index];
+      const choiceKey = `studentChoiceForQuestion${ele}`;
+      const corrKey = `correctOptionForQuestion${ele}`;
+
+      updatedObject = Object.keys(obj).reduce(
+        (object, key) => {
+          if (key !== choiceKey) {
+            if (key !== corrKey) {
+              object[key] = obj[key];
+            }
+          }
+          return object;
+        },
+
+        {}
+      );
+    }
+    console.log({ updatedObject }, "from updateee");
+    setselectedValuesOfRadioButton(updatedObject);
+  }
+  function handleModalSave(obj) {
+    console.log({ obj }, "rrrrrr");
+    setcontrolReviewLink(obj.controlReviewLink);
+    setskippedQuestions(obj.skippedQuestionsList);
+    setcorrectQuestions(obj.correctQuestionsList);
+    setinCorrectQuestions(obj.inCorrectQuestionsList);
+    setallQuestions(obj.allQuestionsList);
+
+    setscore(obj.scoreValue);
+    console.log(obj.skippedQuestionsList, "rrrrrr22");
+    // clearTimeout(myTimeOutVar);
+    // setcontrolReviewLink(true);
+    // setskippedQuestions(skippedQuestionsList);
+    // setcorrectQuestions(correctQuestionsList);
+    // setinCorrectQuestions(inCorrectQuestionsList);
+    // setallQuestions(allQuestionsList);
+    // setscore(scoreValue);
+    confirmBut.current.click();
+  }
+
+  function handleModalClose(selectedValuesOfRadioButton, arr) {
+    notificationCtx.showNotification({
+      title: "Submission Aborted",
+      message:
+        "You have been returned to the exam hall. Goodluke as you tackle the rest of the questons",
+      status: "error",
+    });
+    // setAbortedAssessment
+    removeSkipped(selectedValuesOfRadioButton, arr);
+    //clearTimeout(myTimeOutVar);
+    return;
+  }
   //mark the script
   //itetrate through the question array and the data collected
   //by the  selectedValuesOfRadioButton
@@ -303,8 +402,8 @@ function Questions(props) {
     });
     //}
 
-    console.log({ currentArray }, "clickedMarkscript");
-    const unanweredQuestionsList = [];
+    console.log("clickedMarkscript");
+    const unanweredQuestionsListLoc = [];
     const skippedQuestionsList = [];
     const correctQuestionsList = [];
     const inCorrectQuestionsList = [];
@@ -329,7 +428,7 @@ function Questions(props) {
       //if the question was skipped by the student don't score it
       //just collect data about it
       if (!studentsChoice) {
-        unanweredQuestionsList.push(index + 1);
+        unanweredQuestionsListLoc.push(index + 1);
         skippedQuestionsList.push({ ...questionObj, originalIndex: index });
 
         setselectedValuesOfRadioButton((selectedValuesOfRadioButton) => ({
@@ -342,8 +441,8 @@ function Questions(props) {
       }
 
       console.log({ studentsChoice });
-      console.log({ optionsArray });
-      console.log({ correctOptionLetter });
+      // console.log({ optionsArray });
+      // console.log({ correctOptionLetter });
       //transform correct option letter into real value
       correctOptionValue = checkOptions(correctOptionLetter, optionsArray);
 
@@ -364,26 +463,75 @@ function Questions(props) {
     //the assessment process if the student wants to return to the
     //skipped question
     if (skippedQuestionsList.length) {
-      setunanweredQuestionsList(unanweredQuestionsList);
+      setunanweredQuestionsList(unanweredQuestionsListLoc);
+      const subSkippedValue = {
+        skippedQuestionsList,
+        correctQuestionsList,
+        inCorrectQuestionsList,
+        allQuestionsList,
+        scoreValue,
+
+        controlReviewLink: true,
+        unanweredQuestionsListLoc,
+      };
+
+      setsubSkippedValue(subSkippedValue);
       refBut.current.click();
-      //   const confirmAns =
-      //     confirm(`You have skipped questions ${unanweredQuestionsList.join(",")}
+      //refBut.current.click();
+      console.log({ skippedQuestionsList }, "trmm");
+      myTimeOutVar = setTimeout(() => {
+        handleModalClose(
+          selectedValuesOfRadioButton,
+          unanweredQuestionsListLoc
+        );
+
+        confirmBut.current.click();
+      }, 30000);
+      // const confirmAns =
+      //   confirm(`You have skipped questions ${unanweredQuestionsList.join(",")}
       // if you click ok your script will be assessed without the skipped questions`);
 
-      if ("") {
-        console.log({ selectedValuesOfRadioButton }, "inConfirm");
+      // if (confirmAns) {
+      //   console.log({ selectedValuesOfRadioButton }, "inConfirm");
+      //   // const subSkippedValue = {
+      //   skippedQuestionsList,
+      //   correctQuestionsList,
+      //   inCorrectQuestionsList,
+      //   allQuestionsList,scoreValue,
+      //   controlReviewLink:true,
+      //   unanweredQuestionsList
+      // };
 
-        setcontrolReviewLink(true);
-        setskippedQuestions(skippedQuestionsList);
-        setcorrectQuestions(correctQuestionsList);
-        setinCorrectQuestions(inCorrectQuestionsList);
-        setallQuestions(allQuestionsList);
-        setscore(scoreValue);
+      // setsubSkippedValue(subSkippedValue)
 
-        return;
-      } else {
-        return;
-      }
+      // setcontrolReviewLink(true);
+      // setskippedQuestions(skippedQuestionsList);
+      // setcorrectQuestions(correctQuestionsList);
+      // setinCorrectQuestions(inCorrectQuestionsList);
+      // setallQuestions(allQuestionsList);
+      // setscore(scoreValue);
+
+      //   return;
+      // } else {
+      // myTimeOutVar = setTimeout(() => {
+      //   notificationCtx.showNotification({
+      //     title: "Submission Aborted",
+      //     message: "You have been returned to the questons",
+      //     status: "error",
+      //   });
+      //   confirmBut.current.click();
+      //   return;
+      // }, 40000);
+      //   notificationCtx.showNotification({
+      //     title: "Submission Aborted",
+      //     message: "You have been returned to the questons",
+      //     status: "error",
+      //   });
+      //   // setAbortedAssessment
+      //   removeSkipped(selectedValuesOfRadioButton, unanweredQuestionsList);
+
+      //   return;
+      // }
     } else {
       setcontrolReviewLink(true);
       console.log({ inCorrectQuestionsList }, "in mmmkllloo");
@@ -598,11 +746,17 @@ For easy type questions
         tabindex="-1"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
+        // onClick={() =>
+        //   handleModalClose(selectedValuesOfRadioButton, questionsListunaswer)
+        // }
       >
         <div class="modal-dialog">
           <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">
+            <div class="modal-header text-center">
+              <h5
+                class="modal-title text-danger  fw-bold"
+                id="exampleModalLabel"
+              >
                 Skipped Questions Alert
               </h5>
               <button
@@ -610,6 +764,12 @@ For easy type questions
                 class="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
+                // onClick={() =>
+                //   handleModalClose(
+                //     selectedValuesOfRadioButton,
+                //     questionsListunaswer
+                //   )
+                // }
               ></button>
             </div>
             <div class="modal-body">
@@ -620,11 +780,22 @@ For easy type questions
                 type="button"
                 class="btn btn-secondary"
                 data-bs-dismiss="modal"
+                ref={confirmBut}
+                onClick={() =>
+                  handleModalClose(
+                    selectedValuesOfRadioButton,
+                    questionsListunaswer
+                  )
+                }
               >
-                Close
+                Cancel
               </button>
-              <button type="button" class="btn btn-primary">
-                Save changes
+              <button
+                onClick={() => handleModalSave(controlSkippedGlo)}
+                type="button"
+                class="btn btn-primary"
+              >
+                Continue
               </button>
             </div>
           </div>
